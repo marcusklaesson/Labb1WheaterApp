@@ -13,6 +13,9 @@
 		CD319CE323E82B12005DA5C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD319CE123E82B12005DA5C3 /* Main.storyboard */; };
 		CD319CE523E82B16005DA5C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD319CE423E82B16005DA5C3 /* Assets.xcassets */; };
 		CD319CE823E82B16005DA5C3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD319CE623E82B16005DA5C3 /* LaunchScreen.storyboard */; };
+		CD319CF023E9BC10005DA5C3 /* WeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD319CEF23E9BC10005DA5C3 /* WeatherCell.swift */; };
+		CD319CF223E9CAF1005DA5C3 /* weatherAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD319CF123E9CAF1005DA5C3 /* weatherAPI.swift */; };
+		CD319CF423E9CB52005DA5C3 /* weatherValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD319CF323E9CB52005DA5C3 /* weatherValues.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		CD319CE423E82B16005DA5C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CD319CE723E82B16005DA5C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CD319CE923E82B16005DA5C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CD319CEF23E9BC10005DA5C3 /* WeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCell.swift; sourceTree = "<group>"; };
+		CD319CF123E9CAF1005DA5C3 /* weatherAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weatherAPI.swift; sourceTree = "<group>"; };
+		CD319CF323E9CB52005DA5C3 /* weatherValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weatherValues.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,10 +65,13 @@
 				CD319CDB23E82B12005DA5C3 /* AppDelegate.swift */,
 				CD319CDD23E82B12005DA5C3 /* SceneDelegate.swift */,
 				CD319CDF23E82B12005DA5C3 /* ViewController.swift */,
+				CD319CEF23E9BC10005DA5C3 /* WeatherCell.swift */,
 				CD319CE123E82B12005DA5C3 /* Main.storyboard */,
 				CD319CE423E82B16005DA5C3 /* Assets.xcassets */,
 				CD319CE623E82B16005DA5C3 /* LaunchScreen.storyboard */,
 				CD319CE923E82B16005DA5C3 /* Info.plist */,
+				CD319CF123E9CAF1005DA5C3 /* weatherAPI.swift */,
+				CD319CF323E9CB52005DA5C3 /* weatherValues.swift */,
 			);
 			path = Labb1WheaterApp;
 			sourceTree = "<group>";
@@ -138,8 +147,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD319CF423E9CB52005DA5C3 /* weatherValues.swift in Sources */,
+				CD319CF023E9BC10005DA5C3 /* WeatherCell.swift in Sources */,
 				CD319CE023E82B12005DA5C3 /* ViewController.swift in Sources */,
 				CD319CDC23E82B12005DA5C3 /* AppDelegate.swift in Sources */,
+				CD319CF223E9CAF1005DA5C3 /* weatherAPI.swift in Sources */,
 				CD319CDE23E82B12005DA5C3 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
