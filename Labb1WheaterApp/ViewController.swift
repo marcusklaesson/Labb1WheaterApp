@@ -8,75 +8,72 @@
 
 import UIKit
 import CoreLocation
+import SwiftUI
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+    
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var button: UIButton!
+   
+    var cityTemp = [Double]()
+    var cityList = [String]()
     
-    
-    
-    var addCity = [String]()
+    var cityWind = [Double]()
+    var cityClouds = [String]()
     var searching = false
-    var cityName = String()
+    //var sendClouds: String?
+    
+  
+    var filteredArray = ["Berlin", "Tokyo", "Göteborg"]
+    var shouldShowSearchResults = false
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //searchBar.delegate = self
+        //filteredArray = userData as [AnyObject]
         
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        
+        loadListOfCountries()
+        sort()
       
-        
-        tableView.register(WeatherCell.self, forCellReuseIdentifier: "WeatherCell")
-       
+    }
+  
+    func loadListOfCountries() {
+    
+    
+}
+    func sort() {
+       // self.filteredArray = self.filteredArray.sorted()
     }
     
-    @IBAction func button(_ sender: Any) {
-        
-       
-        
-        let alertController = UIAlertController(title: "City", message: "Type in cityname", preferredStyle: .alert)
-        
-            alertController.addTextField { textField in
-            textField.placeholder = "Enter city"
-            
-        }
-                
-        let action1 = UIAlertAction(title: "Ok", style: .default) { (action:UIAlertAction) in
-            print("You've pressed ok");
-            let firstTextField = alertController.textFields![0] as UITextField
-            
-            self.addCity.append(firstTextField.text!)
-            print(self.addCity)
-            self.tableView.reloadData()
-            
-            
-        }
-
-        let action2 = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
-            print("You've pressed cancel");
-        }
-        
-    
-
-        alertController.addAction(action1)
-        alertController.addAction(action2)
-      
-        self.present(alertController, animated: true, completion: nil)
-        
-        
-        
-    }
-    
-    
-   /* func getCityWeather(){
+    func getCityWeather(cityName: String){
         let weatherAPI = WeatherAPI()
-
-            weatherAPI.getWeatherValues { (result) in
+        
+        weatherAPI.getWeatherValues(x: cityName) { (result) in
                         switch result {
-                        case .success(let weather): print("Value: " + weather.name)
+                        case .success(let weather): print("Name: " + weather.name!)
                           DispatchQueue.main.async {
-                           
+                        
+                            
+                            self.cityList.append(cityName)
+                            self.cityTemp.append(weather.main.temp)
+                            self.cityWind.append(weather.wind.speed)
+                            self.cityClouds.append(weather.weather[0].icon)
+                            
+                            
+                            
+                            print("City: ",self.cityList)
+                            print("Temp: ",self.cityTemp)
+                            print("Wind: ",self.cityWind)
+                            print("Clouds: ",self.cityClouds)
+                            
+                             self.tableView.reloadData()
                           }
 
                           case .failure(let error): print("Error: \(error)")
@@ -84,79 +81,120 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
                     }
         
-    }*/
-    
-   /* func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+       
         
-    
         
-            if searchBar.text == nil || searchBar.text == "" {
+        
+        if searchBar.text == nil || searchBar.text == "" {
+                
                searching = false
-               print("search not active")
                view.endEditing(true)
                tableView.reloadData()
-
-           } else {
-
-               searching = true
-               print("search is active")
-               
-                
-                addCity = searchCity.filter({$0.prefix(searchText.count) == searchText})
-               
-               tableView.reloadData()
-             
            }
-                   // addCity.append(searchBar.text!)
-                       //            print(addCity)
-                   
-    
+           else {
+           
+            //filteredArray = cityList.filter({$0.prefix(searchText.count) == searchText})
+           
+             searching = true
+            
+
+            tableView.reloadData()
+        }
         
-    }*/
+        
+        
+        
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         
         
-        
-        /*if searching {
-            //print("numberofrowinsectionCountry",(searchCountry))
-            return addCity.count
-            
-        }else{
-            //print("numberofrowinsectionArraylist",(arrayList))
-            return searchCity.count
-            
-        }*/
-        return self.addCity.count
-        
+        if searching {
+                   return self.filteredArray.count
+               }
+               else {
+                   return self.cityList.count
+        }
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell") as! WeatherCell
-        
-        cell.textLabel?.text = self.addCity[indexPath.row]
-        
-        //let weatherAPI = addCity[indexPath.row]
-        
-        //cell.textLabel?.text = weatherAPI
-    
-        /*if searching {
-            cell.textLabel?.text = searchCountry[indexPath.row]
-            print("tableViewCountry",(searchCountry))
-            cell.imageView?.image = UIImage(named: "sunny")
-            cell.detailTextLabel?.text = "10°C"
-        }else{
-            cell.textLabel?.text = arrayList[indexPath.row]
-            print("tableViewArrayList",(arrayList))
-            cell.imageView?.image = UIImage(named: "sunny")
-            cell.detailTextLabel?.text = "20°C"
-        }*/
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
-        return cell
+        // convert double to string and kelvin to celsius
+        /*func tempUnits(){
+                        
+                       var double = cityTemp[indexPath.row] - 273.15
+                         double = Double(round(10*double)/10)
+                         let doubleToString = String(double) + "℃"
+                         cell.detailTextLabel?.text = doubleToString
+                        }
+        
+       
+        tempUnits()*/
+        
+       if searching {
+           
+        cell.textLabel?.text = self.filteredArray[indexPath.row]
+       }
+       else {
+        cell.textLabel?.text = self.cityList[indexPath.row]
+       }
+        
+      
+        
+            
+            return cell
+
+       
+
+        
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("funkar??!?!?")
+        filteredArray = [cityList[indexPath.row]]
+        
+        
+        
+        
+        /*let city = cityList[indexPath.row]
+        getCityWeather(cityName: city)*/
+    
+        self.performSegue(withIdentifier: "InputVCToDisplayVC", sender: self)
+         
+        
+        }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?){
+        
+        
+        
+        if segue.identifier == "InputVCToDisplayVC" {
+        var indexPath = IndexPath()
+        let detailsVC = segue.destination as! DetailViewController
+        indexPath = tableView.indexPathForSelectedRow!
+        
+        let stringArray = cityTemp.map { String($0) }
+        detailsVC.sendTemp = stringArray[indexPath.row]
+        
+        let stringArray1 = cityWind.map { String($00) }
+        detailsVC.sendWind = stringArray1[indexPath.row]
+        
+        let stringArray2 = cityClouds.map { String($0) }
+        detailsVC.sendClouds = stringArray2[indexPath.row]
+            }
     }
     
-    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            cityList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+           
+        }
+    }
 
 }
+
 
 

@@ -8,15 +8,19 @@
 
 import Foundation
 
+var viewController = ViewController()
+
+
 struct WeatherAPI {
-    var input: String = ""
-    let baseURL: String = "https://api.openweathermap.org/data/2.5/weather?q=&"
+    
+    let baseURL: String = "https://api.openweathermap.org/data/2.5/weather?q="
     let key: String = "&APPID=2a5609d7b130e0bbf6cd10ddb7e3a916"
     
     
-    func getWeatherValues(completion: @escaping( Result<WeatherValues, Error>) -> Void) {
+    func getWeatherValues(x : String, completion: @escaping( Result<Weather, Error>) -> Void) {
         // url
-        let urlString = baseURL + input + key
+        let urlString = baseURL + x + key
+        print(urlString)
         guard let url: URL = URL(string: urlString) else { return }
         // Request
         print("Creating request..")
@@ -30,10 +34,13 @@ struct WeatherAPI {
                  //print("We got data! \(String(data: unwrappedData, encoding: String.Encoding.utf8) ?? "No data")")
                 do {
                     let decoder = JSONDecoder()
-                    let weather: WeatherValues = try decoder.decode(WeatherValues.self, from: unwrappedData)
+                    let weather: Weather = try decoder.decode(Weather.self, from: unwrappedData)
                     
+                    
+        
                     print("Weather id: \(weather.id)")
-                    print("Weather value: \(weather.name)")
+                    print("Weather name: \(String(describing: weather.name))")
+                    
                     completion(.success(weather))
                 } catch {
                     print("Couldnt parse JSON..")
@@ -48,4 +55,3 @@ struct WeatherAPI {
     }
     
 }
-
