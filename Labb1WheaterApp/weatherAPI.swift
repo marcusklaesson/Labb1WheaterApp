@@ -41,10 +41,7 @@ struct WeatherAPI {
                 do {
                     let decoder = JSONDecoder()
                     let weather: Weather = try decoder.decode(Weather.self, from: data)
-                    
-                    
-                    
-                    
+          
                     print("Weather id: \(weather.id)")
                     print("Weather name: \(String(describing: weather.name))")
                     

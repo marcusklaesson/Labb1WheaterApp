@@ -14,20 +14,17 @@ import SwiftUI
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
-    
     @IBOutlet weak var tableView: UITableView!
     
-    var cities: [String] = cityListJson()
+    var cities: [String]? = cityListJson()
     
     var cityTemp = [Double]()
     var cityWind = [Double]()
     var cityClouds = [String]()
     var cityCountry = [String]()
-    
-    
+
     var searching = false
-    
-    
+
     var cityList = [String]()
     var filteredArray = [String]()
     var myData = String()
@@ -57,9 +54,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
     }
   
-   
-    
-    
     func getCityWeather(cityName: String){
         let weatherAPI = WeatherAPI()
         
@@ -86,9 +80,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
             case .failure(let error): print("Error: \(error)")
             }
-            
         }
-        
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
        
@@ -100,15 +92,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             tableView.reloadData()
         }
         else {
-            filteredArray = cities.filter({$0.prefix(searchText.count) == searchText})
-            filteredArray += cities
+            if let myCities = cities {
+                filteredArray = myCities.filter({$0.prefix(searchText.count) == searchText})
+                filteredArray += myCities
+            }else {
+                print("error this is nil")
+            }
             filteredArray.append(city!)
             searching = true
-            
             tableView.reloadData()
-    
         }
-        
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         
@@ -121,8 +114,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
     }
-    
-  
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellDisplay") as? CustomTableViewCell
@@ -147,7 +138,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 cell?.weatherIcon?.image = image
                 cell?.weatherIcon?.isHidden = false
                 
-                
             }
           }
         
@@ -165,13 +155,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             cell?.cityLabel?.text = self.cityList[indexPath.row]
             //saveCitys()
             cell?.animateIcon()
-            
-            
-            
-            
+        
         }
         
-       
         return cell!
     }
     func saveCitys(){
@@ -205,21 +191,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             searching = false
             self.searchBar.text?.removeAll()
         
-                        
+                    
         } else {
             myData = self.cityList[indexPath.row]
-        
             performSegue(withIdentifier: "showCityDetailsSegue", sender: self)
             
-        
         }
         tableView.deselectRow(at: indexPath, animated: true)
-
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
      
-        
         var indexPath = IndexPath()
         let detailsVC = segue.destination as? DetailViewController
         
