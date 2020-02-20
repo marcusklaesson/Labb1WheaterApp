@@ -10,191 +10,267 @@ import UIKit
 import CoreLocation
 import SwiftUI
 
+
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
-    
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var button: UIButton!
-   
-    var cityTemp = [Double]()
-    var cityList = [String]()
     
+    @IBOutlet weak var tableView: UITableView!
+    
+    var cities: [String] = cityListJson()
+    
+    var cityTemp = [Double]()
     var cityWind = [Double]()
     var cityClouds = [String]()
+    var cityCountry = [String]()
+    
+    
     var searching = false
-    //var sendClouds: String?
-    
-  
-    var filteredArray = ["Berlin", "Tokyo", "Göteborg"]
-    var shouldShowSearchResults = false
     
     
+    var cityList = [String]()
+    var filteredArray = [String]()
+    var myData = String()
     
+    var cityListSave = [String]()
+    
+   
+    
+   override func viewWillAppear(_ animated: Bool) {
+       super.viewWillAppear(animated)
+       navigationController?.setNavigationBarHidden(true, animated: animated)
+   }
+ 
     override func viewDidLoad() {
+         
         super.viewDidLoad()
-        //searchBar.delegate = self
-        //filteredArray = userData as [AnyObject]
         
+        
+       
+        //loadCitys()
+        //tableView.reloadData()
+   
+        viewWillDisappear(true)
+        searchBar.delegate = self
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        loadListOfCountries()
-        sort()
-      
     }
   
-    func loadListOfCountries() {
+   
     
-    
-}
-    func sort() {
-       // self.filteredArray = self.filteredArray.sorted()
-    }
     
     func getCityWeather(cityName: String){
         let weatherAPI = WeatherAPI()
         
         weatherAPI.getWeatherValues(x: cityName) { (result) in
-                        switch result {
-                        case .success(let weather): print("Name: " + weather.name!)
-                          DispatchQueue.main.async {
-                        
-                            
-                            self.cityList.append(cityName)
-                            self.cityTemp.append(weather.main.temp)
-                            self.cityWind.append(weather.wind.speed)
-                            self.cityClouds.append(weather.weather[0].icon)
-                            
-                            
-                            
-                            print("City: ",self.cityList)
-                            print("Temp: ",self.cityTemp)
-                            print("Wind: ",self.cityWind)
-                            print("Clouds: ",self.cityClouds)
-                            
-                             self.tableView.reloadData()
-                          }
-
-                          case .failure(let error): print("Error: \(error)")
-                        }
-
-                    }
+            switch result {
+            case .success(let weather): print("Name: " + weather.name)
+            DispatchQueue.main.async {
+                
+         
+                self.cityList.append(cityName)
+                self.cityTemp.append(weather.main.temp)
+                self.cityWind.append(weather.wind!.speed)
+                self.cityClouds.append(weather.weather[0].icon!)
+                self.cityCountry.append(weather.sys!.country)
+                
+                print("City: ",self.cityList)
+                print("Temp: ",self.cityTemp)
+                print("Wind: ",self.cityWind)
+                print("Clouds: ",self.cityClouds)
+                print("Country: ",self.cityCountry)
+                
+                self.tableView.reloadData()
+                }
+                
+            case .failure(let error): print("Error: \(error)")
+            }
+            
+        }
         
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
        
-        
-        
+        let city = searchBar.text
         
         if searchBar.text == nil || searchBar.text == "" {
-                
-               searching = false
-               view.endEditing(true)
-               tableView.reloadData()
-           }
-           else {
-           
-            //filteredArray = cityList.filter({$0.prefix(searchText.count) == searchText})
-           
-             searching = true
-            
-
+            searching = false
+            view.endEditing(true)
             tableView.reloadData()
         }
-        
-        
-        
+        else {
+            filteredArray = cities.filter({$0.prefix(searchText.count) == searchText})
+            filteredArray += cities
+            filteredArray.append(city!)
+            searching = true
+            
+            tableView.reloadData()
+    
+        }
         
     }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         
+        if searching {
+            return self.filteredArray.count
+        }
+        else {
+            return self.cityList.count
+            
+        }
+        
+    }
+    
+  
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellDisplay") as? CustomTableViewCell
+        
+        func tempUnits(){
+            var double = cityTemp[indexPath.row] - 273.15
+            double = Double(round(10*double)/10)
+            let doubleToString = String(double) + "℃"
+            cell?.tempLabel?.text = doubleToString
+            cell?.tempLabel?.isHidden = false
+        }
+        func displayClouds(){
+          let key = "@2x.png"
+          let baseUrl = "http://openweathermap.org/img/wn/"
+            let sendClouds = self.cityClouds[indexPath.row]
+          
+            let url = URL(string: baseUrl + sendClouds + key)
+          let data = try? Data(contentsOf: url!)
+         
+          if let imageData = data {
+              let image = UIImage(data: imageData)
+                cell?.weatherIcon?.image = image
+                cell?.weatherIcon?.isHidden = false
+                
+                
+            }
+          }
         
         if searching {
-                   return self.filteredArray.count
-               }
-               else {
-                   return self.cityList.count
-        }
-    }
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-
-        // convert double to string and kelvin to celsius
-        /*func tempUnits(){
-                        
-                       var double = cityTemp[indexPath.row] - 273.15
-                         double = Double(round(10*double)/10)
-                         let doubleToString = String(double) + "℃"
-                         cell.detailTextLabel?.text = doubleToString
-                        }
-        
-       
-        tempUnits()*/
-        
-       if searching {
-           
-        cell.textLabel?.text = self.filteredArray[indexPath.row]
-       }
-       else {
-        cell.textLabel?.text = self.cityList[indexPath.row]
-       }
-        
-      
-        
             
-            return cell
-
+            cell?.cityLabel?.text = self.filteredArray[indexPath.row]
+            cell?.tempLabel?.isHidden = true
+            cell?.weatherIcon?.isHidden = true
+            
+        }
+        else {
+        
+            displayClouds()
+            tempUnits()
+            cell?.cityLabel?.text = self.cityList[indexPath.row]
+            //saveCitys()
+            cell?.animateIcon()
+            
+            
+            
+            
+        }
+        
        
-
-        
+        return cell!
     }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("funkar??!?!?")
-        filteredArray = [cityList[indexPath.row]]
+    func saveCitys(){
         
+        let defaults = UserDefaults.standard
+        defaults.set(self.cityList, forKey: "City")
+        //defaults.set(self.cityClouds, forKey: "Clouds")
+        print("SAVECITY: ",self.cityList)
+        print("SAVECLOUD: ",self.cityClouds)
         
-        
-        
-        /*let city = cityList[indexPath.row]
-        getCityWeather(cityName: city)*/
     
-        self.performSegue(withIdentifier: "InputVCToDisplayVC", sender: self)
-         
+    }
+    func loadCitys(){
+        
+        let defaults = UserDefaults.standard
+        self.cityList = defaults.stringArray(forKey: "City") ?? [String]()
+        //self.cityClouds = defaults.stringArray(forKey: "Clouds") ?? [String]()
+        self.tableView.dataSource = self.cityList as? UITableViewDataSource
+       // self.tableView.dataSource = self.cityClouds as? UITableViewDataSource
+        print("LOADCITY: ",self.cityList)
+        //print("LOADCLOUD: ",self.cityClouds)
+        
+        tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if (searching) {
+            myData = self.filteredArray[indexPath.row]
+            getCityWeather(cityName: myData)
+            searching = false
+            self.searchBar.text?.removeAll()
+        
+                        
+        } else {
+            myData = self.cityList[indexPath.row]
+        
+            performSegue(withIdentifier: "showCityDetailsSegue", sender: self)
+            
         
         }
+        tableView.deselectRow(at: indexPath, animated: true)
+
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
+     
         
-        
-        
-        if segue.identifier == "InputVCToDisplayVC" {
         var indexPath = IndexPath()
-        let detailsVC = segue.destination as! DetailViewController
+        let detailsVC = segue.destination as? DetailViewController
+        
         indexPath = tableView.indexPathForSelectedRow!
-        
+       
         let stringArray = cityTemp.map { String($0) }
-        detailsVC.sendTemp = stringArray[indexPath.row]
-        
+        detailsVC?.sendTemp = stringArray[indexPath.row]
+
         let stringArray1 = cityWind.map { String($00) }
-        detailsVC.sendWind = stringArray1[indexPath.row]
-        
+        detailsVC?.sendWind = stringArray1[indexPath.row]
+     
         let stringArray2 = cityClouds.map { String($0) }
-        detailsVC.sendClouds = stringArray2[indexPath.row]
-            }
-    }
-    
+        detailsVC?.sendClouds = stringArray2[indexPath.row]
+        
+        let stringArray3 = cityList.map { String($0) }
+        detailsVC?.sendCity = stringArray3[indexPath.row]
+        
+        let stringArray4 = cityCountry.map { String($0) }
+        detailsVC?.sendCountry = stringArray4[indexPath.row]
+     }
+ 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             cityList.remove(at: indexPath.row)
+            cityTemp.remove(at: indexPath.row)
+            cityWind.remove(at: indexPath.row)
+            cityClouds.remove(at: indexPath.row)
+            cityCountry.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.reloadData()
         } else if editingStyle == .insert {
-           
+            
         }
     }
-
+    
 }
+func cityListJson() -> [String] {
 
+       let fileName: String = "citylist"
+
+       do {
+           if let file = Bundle.main.url(forResource: fileName, withExtension: "json") {
+               let data = try Data.init(contentsOf: file)
+               let decoder = JSONDecoder()
+               let cityList: [String] = try decoder.decode([String].self, from: data)
+               return cityList
+           }
+       } catch {
+           print(error)
+       }
+       return [String]()
+   }
 
 

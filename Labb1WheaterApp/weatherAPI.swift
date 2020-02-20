@@ -8,6 +8,8 @@
 
 import Foundation
 
+
+
 var viewController = ViewController()
 
 
@@ -17,7 +19,10 @@ struct WeatherAPI {
     let key: String = "&APPID=2a5609d7b130e0bbf6cd10ddb7e3a916"
     
     
+    
     func getWeatherValues(x : String, completion: @escaping( Result<Weather, Error>) -> Void) {
+        
+        
         // url
         let urlString = baseURL + x + key
         print(urlString)
@@ -25,33 +30,36 @@ struct WeatherAPI {
         // Request
         print("Creating request..")
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let unwrappedError = error {
-                print("Nått gick fel. Error: \(unwrappedError)")
-                completion(.failure(unwrappedError))
-                return
-            }
-            if let unwrappedData = data {
-                 //print("We got data! \(String(data: unwrappedData, encoding: String.Encoding.utf8) ?? "No data")")
+            
+            
+            
+            if let data = data {
+                print("We got data! \(String(data: data, encoding: String.Encoding.utf8) ?? "No data")")
+                
+                
+               
                 do {
                     let decoder = JSONDecoder()
-                    let weather: Weather = try decoder.decode(Weather.self, from: unwrappedData)
+                    let weather: Weather = try decoder.decode(Weather.self, from: data)
                     
                     
-        
+                    
+                    
                     print("Weather id: \(weather.id)")
                     print("Weather name: \(String(describing: weather.name))")
                     
                     completion(.success(weather))
                 } catch {
-                    print("Couldnt parse JSON..")
+                    print("Error serializing Json: ", error)
+                    
                 }
                 
             }
         }
-        // Starta task
+        //Starta task
         task.resume()
         print("Task started")
-    
+        
     }
     
 }
