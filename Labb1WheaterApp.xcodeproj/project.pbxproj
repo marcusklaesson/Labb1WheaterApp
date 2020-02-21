@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		CD2E65D823FC07180084E880 /* citylist.json in Resources */ = {isa = PBXBuildFile; fileRef = CD2E65D723FC07180084E880 /* citylist.json */; };
+		CD2E65E423FFED060084E880 /* JsonFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2E65E323FFED060084E880 /* JsonFunction.swift */; };
 		CD319CDC23E82B12005DA5C3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD319CDB23E82B12005DA5C3 /* AppDelegate.swift */; };
 		CD319CDE23E82B12005DA5C3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD319CDD23E82B12005DA5C3 /* SceneDelegate.swift */; };
 		CD319CE023E82B12005DA5C3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD319CDF23E82B12005DA5C3 /* ViewController.swift */; };
@@ -22,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		CD2E65D723FC07180084E880 /* citylist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = citylist.json; sourceTree = "<group>"; };
+		CD2E65E323FFED060084E880 /* JsonFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonFunction.swift; sourceTree = "<group>"; };
 		CD319CD823E82B12005DA5C3 /* Labb1WheaterApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Labb1WheaterApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD319CDB23E82B12005DA5C3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CD319CDD23E82B12005DA5C3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				CD2E65D723FC07180084E880 /* citylist.json */,
+				CD2E65E323FFED060084E880 /* JsonFunction.swift */,
 				CD319CDB23E82B12005DA5C3 /* AppDelegate.swift */,
 				CD319CDD23E82B12005DA5C3 /* SceneDelegate.swift */,
 				CD32D98023F2D624006E86DA /* DetailViewController.swift */,
@@ -157,6 +160,7 @@
 				CD32D98523F49844006E86DA /* Weather.swift in Sources */,
 				CD319CE023E82B12005DA5C3 /* ViewController.swift in Sources */,
 				CD319CDC23E82B12005DA5C3 /* AppDelegate.swift in Sources */,
+				CD2E65E423FFED060084E880 /* JsonFunction.swift in Sources */,
 				CDD72EE423FAEE6D00F3B038 /* CustomTableViewCell.swift in Sources */,
 				CD319CF223E9CAF1005DA5C3 /* weatherAPI.swift in Sources */,
 				CD319CDE23E82B12005DA5C3 /* SceneDelegate.swift in Sources */,

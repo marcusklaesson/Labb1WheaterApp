@@ -16,8 +16,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
-    var cities: [String]? = cityListJson()
+    var jsonFunction = JsonFunction()
+    var cities: [String]?
     
+
     var cityTemp = [Double]()
     var cityWind = [Double]()
     var cityClouds = [String]()
@@ -32,7 +34,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var cityListSave = [String]()
     
    
-    
    override func viewWillAppear(_ animated: Bool) {
        super.viewWillAppear(animated)
        navigationController?.setNavigationBarHidden(true, animated: animated)
@@ -42,10 +43,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
          
         super.viewDidLoad()
         
+        cities = jsonFunction.cityListJson()
         
-       
         //loadCitys()
-        //tableView.reloadData()
+      
    
         viewWillDisappear(true)
         searchBar.delegate = self
@@ -238,21 +239,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
 }
-func cityListJson() -> [String] {
 
-       let fileName: String = "citylist"
 
-       do {
-           if let file = Bundle.main.url(forResource: fileName, withExtension: "json") {
-               let data = try Data.init(contentsOf: file)
-               let decoder = JSONDecoder()
-               let cityList: [String] = try decoder.decode([String].self, from: data)
-               return cityList
-           }
-       } catch {
-           print(error)
-       }
-       return [String]()
-   }
+   
 
 
