@@ -21,6 +21,7 @@ class DetailViewController: UIViewController {
     var sendWind: String?
     var sendClouds: String?
     var sendCountry: String?
+    
     var temp: String?
     
     var animator: UIDynamicAnimator!
@@ -29,19 +30,16 @@ class DetailViewController: UIViewController {
     
     var customTableViewCell = CustomTableViewCell()
     
-   override func viewWillDisappear(_ animated: Bool) {
-       super.viewWillDisappear(animated)
-       navigationController?.setNavigationBarHidden(false, animated: animated)
-   }
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         viewWillDisappear(false)
-        
+
         animator = UIDynamicAnimator(referenceView: view)
         
-        
-   
         clothesForWeather()
         displayCity()
         displayClouds()
@@ -51,23 +49,20 @@ class DetailViewController: UIViewController {
     }
     func displayCountry(){
         cityCountry?.text = "(" + sendCountry! + ")"
-        
     }
     func displayCity(){
         cityLabel?.text = sendCity
     }
-     func displayClouds(){
+    func displayClouds(){
         let key = "@2x.png"
         let baseUrl = "http://openweathermap.org/img/wn/"
-      
         
         let url = URL(string: baseUrl + sendClouds! + key)
         let data = try? Data(contentsOf: url!)
-       
+        
         if let imageData = data {
             let image = UIImage(data: imageData)
             cloudImage?.image = image
-            
         }
         animations()
     }
@@ -77,8 +72,6 @@ class DetailViewController: UIViewController {
         sendWind = "\(DoubleValue)"
         
         windLabel?.text = sendWind! + "M/S"
-        
-        
     }
     func displayTemp(){
         var DoubleValue = (sendTemp! as NSString).doubleValue - 273.15
@@ -86,11 +79,10 @@ class DetailViewController: UIViewController {
         sendTemp = "\(DoubleValue)"
         
         tempLabel?.text = sendTemp! + "℃"
-       
     }
     func clothesForWeather(){
         dynamicBehavior()
-    
+        
         var currentTemp = (sendTemp! as NSString).doubleValue - 273.15
         currentTemp = Double(round(10*currentTemp)/10)
         temp = "\(currentTemp)"
@@ -115,12 +107,9 @@ class DetailViewController: UIViewController {
         } else if currentTemp < 0 {
             clothesWeather.text = "Todays weather with the temperture of " + temp! + "℃ allows you to wear " + itemColdAsHell
         }
-        
         viewController.reloadInputViews()
-      
     }
     func dynamicBehavior(){
-        
         var gravity: UIDynamicBehavior
         gravity = UIGravityBehavior(items: [clothesWeather])
         animator.addBehavior(gravity)
@@ -133,15 +122,12 @@ class DetailViewController: UIViewController {
         bounce = UIDynamicItemBehavior(items: [clothesWeather])
         bounce.elasticity = 0.7
         animator.addBehavior(bounce)
-        
     }
     func animations(){
         UIView.animate(withDuration: 2.0, delay: 0, options: [.repeat, .autoreverse], animations: {
-                           
+            
             self.cloudImage?.transform = CGAffineTransform(translationX:0, y: -10)
-                         
-                           
-                         }, completion: nil)
-            }
+            
+        }, completion: nil)
     }
-
+}

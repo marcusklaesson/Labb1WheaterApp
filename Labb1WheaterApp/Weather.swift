@@ -11,7 +11,7 @@ struct Weather: Codable {
     let weather: [WeatherElement]
     let base: String?
     let main: Main
-    let visibility: Int
+    let visibility: Int?
     let wind: Wind?
     let clouds: Clouds
     let dt: Int
@@ -36,7 +36,7 @@ struct Main: Codable {
     let temp: Double
     let pressure, humidity: Int
     let tempMin, tempMax: Double
-
+    
     enum CodingKeys: String, CodingKey {
         case temp, pressure, humidity
         case tempMin = "temp_min"
@@ -56,7 +56,7 @@ struct Sys: Codable {
 struct WeatherElement: Codable {
     let id: Int
     let main, weatherDescription, icon: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case id, main
         case weatherDescription = "description"
