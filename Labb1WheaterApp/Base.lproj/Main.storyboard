@@ -84,10 +84,10 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="bottomMargin" secondItem="Nlo-If-g6Q" secondAttribute="bottom" id="FcU-tn-Vfe"/>
-                            <constraint firstItem="Nlo-If-g6Q" firstAttribute="top" secondItem="uxk-WK-BbC" secondAttribute="topMargin" id="JCL-1b-bfm"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Nlo-If-g6Q" secondAttribute="trailing" id="VJ0-4V-vx3"/>
-                            <constraint firstItem="Nlo-If-g6Q" firstAttribute="leading" secondItem="uxk-WK-BbC" secondAttribute="leadingMargin" id="haP-ma-syg"/>
+                            <constraint firstItem="Nlo-If-g6Q" firstAttribute="bottom" secondItem="sRJ-IS-VZd" secondAttribute="bottom" id="Ibx-iS-wdg"/>
+                            <constraint firstItem="Nlo-If-g6Q" firstAttribute="top" secondItem="sRJ-IS-VZd" secondAttribute="top" id="JvL-xU-rny"/>
+                            <constraint firstItem="sRJ-IS-VZd" firstAttribute="trailing" secondItem="Nlo-If-g6Q" secondAttribute="trailing" constant="20" id="Z0n-wQ-xR0"/>
+                            <constraint firstItem="Nlo-If-g6Q" firstAttribute="leading" secondItem="sRJ-IS-VZd" secondAttribute="leading" constant="20" id="bFg-ua-yPX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="sRJ-IS-VZd"/>
                     </view>

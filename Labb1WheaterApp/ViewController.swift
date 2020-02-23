@@ -32,8 +32,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        
     }
-    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -45,9 +45,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
+        load()
     }
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
         let city = searchBar.text
         
         if let myCities = cities {
@@ -79,7 +80,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 print("Wind: ",self.cityWind)
                 print("Clouds: ",self.cityClouds)
                 print("Country: ",self.cityCountry)
-                
+                //self.save()
                 self.tableView.reloadData()
                 }
                 
@@ -132,6 +133,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         func displayClouds(){
             let key = "@2x.png"
             let baseUrl = "http://openweathermap.org/img/wn/"
+            
             let sendClouds = self.cityClouds[indexPath.row]
             
             let url = URL(string: baseUrl + sendClouds + key)
@@ -141,23 +143,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 let image = UIImage(data: imageData)
                 cell?.weatherIcon?.image = image
                 cell?.weatherIcon?.isHidden = false
-                
             }
         }
-        
         if searching {
             
             cell?.cityLabel?.text = self.filteredArray[indexPath.row]
             cell?.tempLabel?.isHidden = true
             cell?.weatherIcon?.isHidden = true
-            
         }
         else {
-            
+            cell?.cityLabel?.text = self.cityList[indexPath.row]
             displayClouds()
             tempUnits()
-            cell?.cityLabel?.text = self.cityList[indexPath.row]
-        }
+        } 
         return cell!
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -165,13 +163,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if (searching) {
             myData = self.filteredArray[indexPath.row]
             getCityWeather(cityName: myData)
+            
             searching = false
             self.searchBar.text?.removeAll()
-          
+            
         } else {
-            
             myData = self.cityList[indexPath.row]
-            
             performSegue(withIdentifier: "showCityDetailsSegue", sender: self)
         }
         tableView.deselectRow(at: indexPath, animated: true)
@@ -184,9 +181,66 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             cityClouds.remove(at: indexPath.row)
             cityCountry.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            save()
             tableView.reloadData()
+            
         } else if editingStyle == .insert {
             
+        }
+    }
+    func tableView(_ tableView: UITableView,
+                   leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    {
+        let closeAction = UIContextualAction(style: .normal, title:  "Mark as favorite?", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+            
+            self.save()
+            success(true)
+        })
+        
+        closeAction.backgroundColor = .blue
+        
+        return UISwipeActionsConfiguration(actions: [closeAction])
+    }
+    
+    func save(){
+        UserDefaults.standard.set(self.cityList, forKey: "10")
+        UserDefaults.standard.set(self.cityClouds, forKey: "11")
+        UserDefaults.standard.set(self.cityTemp, forKey: "12")
+        UserDefaults.standard.set(self.cityCountry, forKey: "13")
+        UserDefaults.standard.set(self.cityWind, forKey: "14")
+        
+        print("SAVECITY: ",self.cityList)
+    }
+    func load(){
+        if let loadedData:[String] = UserDefaults.standard.value(forKey: "10") as? [String] {
+            self.cityList = loadedData
+            
+            print("LOADCITY: ",self.cityList)
+            tableView.reloadData()
+        }
+        if let loadedData:[String] = UserDefaults.standard.value(forKey: "11") as? [String] {
+            self.cityClouds = loadedData
+            
+            print("LOADCLOUDS: ",self.cityClouds)
+            tableView.reloadData()
+        }
+        if let loadedData:[Double] = UserDefaults.standard.value(forKey: "12") as? [Double] {
+            self.cityTemp = loadedData
+            
+            print("LOADTEMP: ",self.cityTemp)
+            tableView.reloadData()
+        }
+        if let loadedData:[String] = UserDefaults.standard.value(forKey: "13") as? [String] {
+            self.cityCountry = loadedData
+            
+            print("LOADCOUNTRY: ",self.cityCountry)
+            tableView.reloadData()
+        }
+        if let loadedData:[Double] = UserDefaults.standard.value(forKey: "14") as? [Double] {
+            self.cityWind = loadedData
+            
+            print("LOADTEMP: ",self.cityWind)
+            tableView.reloadData()
         }
     }
 }

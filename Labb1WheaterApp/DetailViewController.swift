@@ -15,6 +15,8 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var cityLabel: UILabel?
     @IBOutlet weak var cityCountry: UILabel?
     @IBOutlet weak var clothesWeather: UILabel!
+    @IBOutlet weak var starImage: UIImageView!
+    
     
     var sendCity: String?
     var sendTemp: String?
@@ -37,7 +39,7 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewWillDisappear(false)
-
+        
         animator = UIDynamicAnimator(referenceView: view)
         
         clothesForWeather()
@@ -131,3 +133,4 @@ class DetailViewController: UIViewController {
         }, completion: nil)
     }
 }
+

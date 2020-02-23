@@ -46,7 +46,7 @@ struct Main: Codable {
 
 // MARK: - Sys
 struct Sys: Codable {
-    let type, id: Int
+    let type, id: Int?
     let message: Double?
     let country: String
     let sunrise, sunset: Int
