@@ -33,6 +33,7 @@ struct WeatherAPI {
                     
                     print("Weather name: \(String(describing: weather.name))")
                     
+                    
                     completion(.success(weather))
                 } catch {
                     print("Error serializing Json: ", error)

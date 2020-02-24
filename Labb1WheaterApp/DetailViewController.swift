@@ -79,7 +79,7 @@ class DetailViewController: UIViewController {
         var DoubleValue = (sendTemp! as NSString).doubleValue - 273.15
         DoubleValue = Double(round(10*DoubleValue)/10)
         sendTemp = "\(DoubleValue)"
-        
+    
         tempLabel?.text = sendTemp! + "℃"
     }
     func clothesForWeather(){
